@@ -4,9 +4,10 @@ import Search from '@/app/ui/dasboard/search/search'
 import PaginationPage from '@/app/ui/dasboard/pagination/pagination'
 import { fetchUsers } from '@/app/lib/data'
 
-const UserPage = async () => {
-  const users = await fetchUsers();
-  console.log(users);
+const UserPage = async ({ searchParams }) => {
+  const q = searchParams?.q || ''
+  const page = searchParams?.page || 1
+  const { users, count } = await fetchUsers(q, page)
   return (
     <div className='w-full space-y-4 rounded-lg p-4 bg-gray-800'>
       <div className='flex items-center justify-between'>
@@ -33,10 +34,10 @@ const UserPage = async () => {
           </thead>
           <tbody className='text-gray-300  text-sm'>
             {users.map((user) => (
-              <tr key={user.id}>
+              <tr key={user._id}>
                 <td className='flex items-center py-4 gap-2'>
                   <Image
-                    src={user.img || '/noavatar.png'}
+                    src={user.img || '/noproduct.jpg'}
                     className='rounded-full w-[40px] h-[40px] aspect-square object-cover object-top'
                     alt=''
                     width={40}
@@ -68,7 +69,7 @@ const UserPage = async () => {
         </table>
       </div>
       <div className=''>
-        <PaginationPage />
+        <PaginationPage count={count} />
       </div>
     </div>
   )

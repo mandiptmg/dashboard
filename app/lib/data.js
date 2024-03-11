@@ -1,14 +1,37 @@
-import { User } from './model'
+import { Product, User } from './model'
 import { ConnectDB } from './mongodb'
 
-export const fetchUsers = async () => {
+export const fetchUsers = async (q, page) => {
+  console.log(q)
+  const regex = new RegExp(q, 'i')
+  const ITEM_PER_PAGE = 2
   try {
     ConnectDB()
-    const users = await User.find()
-    return users;
+    const count = await User.find({ username: { $regex: regex } }).count()
+    const users = await User.find({ username: { $regex: regex } })
+      .limit(ITEM_PER_PAGE)
+      .skip((page - 1) * ITEM_PER_PAGE)
+    return { users, count }
   } catch (error) {
     console.log('failed to connected fetch users', error)
     throw new Error('failed to connected with fetch users')
+  }
+}
+
+export const fetchProducts = async (q, page) => {
+  console.log(q)
+  const regex = new RegExp(q, 'i')
+  const ITEM_PER_PAGE = 2
+  try {
+    ConnectDB()
+    const count = await Product.find({ title: { $regex: regex } }).count()
+    const products = await Product.find({ title: { $regex: regex } })
+      .limit(ITEM_PER_PAGE)
+      .skip((page - 1) * ITEM_PER_PAGE)
+    return { products, count }
+  } catch (error) {
+    console.log('failed to connected fetch products', error)
+    throw new Error('failed to connected with fetch products')
   }
 }
 
