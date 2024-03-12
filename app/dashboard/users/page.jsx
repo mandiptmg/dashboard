@@ -37,7 +37,7 @@ const UserPage = async ({ searchParams }) => {
               <tr key={user._id}>
                 <td className='flex items-center py-4 gap-2'>
                   <Image
-                    src={user.img || '/noproduct.jpg'}
+                    src={user.img || '/noavatar.png'}
                     className='rounded-full w-[40px] h-[40px] aspect-square object-cover object-top'
                     alt=''
                     width={40}

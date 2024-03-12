@@ -1,12 +1,14 @@
+import { addUser } from '@/app/lib/actions'
 
 const AddUser = () => {
   return (
     <div className='w-full bg-gray-800/50 p-6'>
-      <form>
-        <div className='grid md:grid-cols-2 w-full  gap-2'>
+      <form action={addUser}>
+        <div className='grid md:grid-cols-2 w-full gap-y-3  gap-2'>
           <div className='w-full'>
             <input
               type='text'
+              name='username'
               placeholder='username'
               className='w-full p-2 placeholder:capitalize placeholder:pl-2  bg-gray-700/55 border border-gray-800 '
               required
@@ -14,8 +16,27 @@ const AddUser = () => {
           </div>
           <div className='w-full'>
             <input
+              type='email'
+              name='email'
+              placeholder='email'
+              className='w-full p-2 placeholder:capitalize placeholder:pl-2  bg-gray-700/55 border border-gray-800 '
+              required
+            />
+          </div>
+          <div className='w-full'>
+            <input
               type='password'
+              name='password'
               placeholder='password'
+              className='w-full p-2 placeholder:capitalize placeholder:pl-2  bg-gray-700/55 border border-gray-800 '
+              required
+            />
+          </div>
+          <div className='w-full'>
+            <input
+              type='tel'
+              name='phone'
+              placeholder='phone no.'
               className='w-full p-2 placeholder:capitalize placeholder:pl-2  bg-gray-700/55 border border-gray-800 '
               required
             />

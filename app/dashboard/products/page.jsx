@@ -37,7 +37,7 @@ const ProductPage = async ({ searchParams }) => {
               <tr key={product._id}>
                 <td className='flex items-center py-4 gap-2'>
                   <Image
-                    src={product.img || '/noavatar.png'}
+                    src={product.img || '/noproduct.jpg'}
                     className='rounded-full w-[40px] h-[40px] object-cover aspect-square object-top'
                     alt=''
                     width={40}
