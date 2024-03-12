@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Search from '@/app/ui/dasboard/search/search'
 import PaginationPage from '@/app/ui/dasboard/pagination/pagination'
 import { fetchProducts } from '@/app/lib/data'
+import { deleteProduct } from '@/app/lib/actions'
 
 const ProductPage = async ({ searchParams }) => {
   const q = searchParams?.q || ''
@@ -34,7 +35,7 @@ const ProductPage = async ({ searchParams }) => {
           </thead>
           <tbody className='text-gray-300  text-sm'>
             {products.map((product) => (
-              <tr key={product._id}>
+              <tr key={product.id}>
                 <td className='flex items-center py-4 gap-2'>
                   <Image
                     src={product.img || '/noproduct.jpg'}
@@ -53,14 +54,19 @@ const ProductPage = async ({ searchParams }) => {
                 <td>{product.stock}</td>
                 <td>
                   <div className='flex items-center gap-2'>
-                    <Link href={`/dashboard/products/${product._id}`}>
+                    <Link href={`/dashboard/products/${product.id}`}>
                       <button className='bg-teal-600/55 hover:bg-teal-700 rounded-md text-sm px-2 p-1'>
                         View
                       </button>
                     </Link>
-                    <button className='bg-red-600/55 hover:bg-red-700 rounded-md text-sm p-1 px-2'>
-                      Delete
-                    </button>
+
+                    <form action={deleteProduct}>
+                      <input type='hidden' name='id' value={product.id} />
+
+                      <button className='bg-red-600/55 hover:bg-red-700 rounded-md text-sm p-1 px-2'>
+                        Delete
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>

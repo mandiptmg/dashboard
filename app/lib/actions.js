@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { User } from './model'
+import { User, Product } from './model'
 import { ConnectDB } from './mongodb'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
@@ -34,4 +34,61 @@ export const addUser = async (formData) => {
 
   revalidatePath('/dashboard/users')
   redirect('/dashboard/users')
+}
+
+export const addProduct = async (formData) => {
+  const { title, stock, price, desc, color, size } =
+    Object.fromEntries(formData)
+
+  try {
+    ConnectDB()
+
+    const newProduct = new Product({
+      title,
+      stock,
+      price,
+      desc,
+      color,
+      size,
+    })
+
+    await newProduct.save()
+  } catch (err) {
+    console.log(err)
+    throw new Error('Failed to create Product!')
+  }
+  revalidatePath('/dashboard/products')
+  redirect('/dashboard/products')
+}
+
+export const deleteUser = async (formData) => {
+  const { id } = Object.fromEntries(formData)
+
+  try {
+    ConnectDB()
+
+    const users = await User.findByIdAndDelete(id)
+    return users
+  } catch (error) {
+    console.log(error)
+    throw new Error('Failed to delete user!')
+  }
+  
+  revalidatePath('/dashboard/users')
+}
+
+export const deleteProduct = async (formData) => {
+  const { id } = Object.fromEntries(formData)
+
+  try {
+    ConnectDB()
+
+    const products = await Product.findByIdAndDelete(id)
+    return products
+  } catch (error) {
+    console.log(error)
+    throw new Error('Failed to delete product!')
+  }
+
+  revalidatePath('/dashboard/products')
 }

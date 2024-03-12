@@ -18,6 +18,17 @@ export const fetchUsers = async (q, page) => {
   }
 }
 
+export const fetchUser = async (id) => {
+  try {
+    ConnectDB()
+    const user = await User.findById(id)
+    return user;
+  } catch (error) {
+    console.log('failed to connected fetch user', error)
+    throw new Error('failed to connected with fetch user')
+  }
+}
+
 export const fetchProducts = async (q, page) => {
   console.log(q)
   const regex = new RegExp(q, 'i')
@@ -32,6 +43,17 @@ export const fetchProducts = async (q, page) => {
   } catch (error) {
     console.log('failed to connected fetch products', error)
     throw new Error('failed to connected with fetch products')
+  }
+}
+
+export const fetchProduct = async (id) => {
+  try {
+    ConnectDB()
+    const product= await User.findById(id)
+    return product
+  } catch (error) {
+    console.log('failed to connected fetch product', error)
+    throw new Error('failed to connected with fetch product')
   }
 }
 

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Search from '@/app/ui/dasboard/search/search'
 import PaginationPage from '@/app/ui/dasboard/pagination/pagination'
 import { fetchUsers } from '@/app/lib/data'
+import { deleteUser } from '@/app/lib/actions'
 
 const UserPage = async ({ searchParams }) => {
   const q = searchParams?.q || ''
@@ -34,7 +35,7 @@ const UserPage = async ({ searchParams }) => {
           </thead>
           <tbody className='text-gray-300  text-sm'>
             {users.map((user) => (
-              <tr key={user._id}>
+              <tr key={user.id}>
                 <td className='flex items-center py-4 gap-2'>
                   <Image
                     src={user.img || '/noavatar.png'}
@@ -58,9 +59,12 @@ const UserPage = async ({ searchParams }) => {
                         View
                       </button>
                     </Link>
-                    <button className='bg-red-600/55 hover:bg-red-700 rounded-md text-sm p-1 px-2'>
-                      Delete
-                    </button>
+                    <form action={deleteUser}>
+                      <input type='hidden' name='id' value={user.id} />
+                      <button className='bg-red-600/55 hover:bg-red-700 rounded-md text-sm p-1 px-2'>
+                        Delete
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
