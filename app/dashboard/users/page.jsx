@@ -49,7 +49,7 @@ const UserPage = async ({ searchParams }) => {
                   </span>
                 </td>
                 <td>{user.email}</td>
-                <td>oct 1, 2022</td>
+                <td>{user.createdAt?.toString().slice(0, 10)}</td>
                 <td>{user.isAdmin ? 'admin' : 'client'}</td>
                 <td>{user.isActive ? 'active' : 'passive'}</td>
                 <td>

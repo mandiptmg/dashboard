@@ -1,10 +1,12 @@
 import Image from 'next/image'
 import avatar from '../../../../public/noavatar.png'
 import { fetchUser } from '@/app/lib/data'
+import { updateUser } from '@/app/lib/actions'
 
 const SingleUserPage = async ({ params }) => {
   const { id } = params
   const user = await fetchUser(id)
+  console.log(user)
   return (
     <div className='w-full grid grid-cols-[1fr,1.5fr] items-start gap-8  bg-gray-800/50 p-6'>
       <div>
@@ -19,7 +21,8 @@ const SingleUserPage = async ({ params }) => {
           {user.username}
         </h1>
       </div>
-      <form>
+      <form action={updateUser}>
+        <input type='hidden' name='id' value={user._id} />
         <div className='w-full space-y-2'>
           <div className='w-full'>
             <label
@@ -31,9 +34,9 @@ const SingleUserPage = async ({ params }) => {
             <input
               type='text'
               id='username'
-              placeholder={ user.username ||'Enter your username'}
+              name='username'
+              placeholder={user.username || 'Enter your username'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -43,9 +46,9 @@ const SingleUserPage = async ({ params }) => {
             <input
               type='email'
               id='email'
-              placeholder={ user.email ||'Enter your email'}
+              name='email'
+              placeholder={user.email || 'Enter your email'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -58,9 +61,9 @@ const SingleUserPage = async ({ params }) => {
             <input
               type='password'
               id='password'
+              name='password'
               placeholder='Enter your password'
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -70,9 +73,9 @@ const SingleUserPage = async ({ params }) => {
             <input
               type='tel'
               id='phone'
-              placeholder={ user.phone ||'Enter your phone number'}
+              name='phone'
+              placeholder={user.phone || 'Enter your phone number'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -84,8 +87,12 @@ const SingleUserPage = async ({ params }) => {
               name='isAdmin'
               className='w-full p-2 bg-gray-700/55 border border-gray-800'
             >
-              <option value={false} selected={!user.isAdmin}>No</option>
-              <option value={true} selected={user.isAdmin}  >Yes</option>
+              <option value={false} selected={!user.isAdmin}>
+                No
+              </option>
+              <option value={true} selected={user.isAdmin}>
+                Yes
+              </option>
             </select>
           </div>
           <div className='w-full'>
@@ -100,8 +107,12 @@ const SingleUserPage = async ({ params }) => {
               name='isActive'
               className='w-full p-2 bg-gray-700/55 border border-gray-800'
             >
-              <option value={false} selected={!user.isActive}>No</option>
-              <option value={true} selected={user.isActive}>Yes</option>
+              <option value={false} selected={!user.isActive}>
+                No
+              </option>
+              <option value={true} selected={user.isActive}>
+                Yes
+              </option>
             </select>
           </div>
           <div className='w-full'>
@@ -110,8 +121,9 @@ const SingleUserPage = async ({ params }) => {
             </label>
             <input
               type='text'
+              name='address'
               id='address'
-              placeholder={user.address ||'Enter your address'}
+              placeholder={user.address || 'Enter your address'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
             />
           </div>

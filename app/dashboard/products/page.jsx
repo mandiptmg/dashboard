@@ -50,7 +50,7 @@ const ProductPage = async ({ searchParams }) => {
                 </td>
                 <td className=''>{product.desc.slice(0, 25)}...</td>
                 <td>$ {product.price}</td>
-                <td>oct 1, 2023</td>
+                <td>{product.createdAt?.toString().slice(0, 10)}</td>
                 <td>{product.stock}</td>
                 <td>
                   <div className='flex items-center gap-2'>

@@ -49,8 +49,8 @@ export const fetchProducts = async (q, page) => {
 export const fetchProduct = async (id) => {
   try {
     ConnectDB()
-    const product= await User.findById(id)
-    return product
+    const product= await Product.findById(id)
+    return product;
   } catch (error) {
     console.log('failed to connected fetch product', error)
     throw new Error('failed to connected with fetch product')

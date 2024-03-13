@@ -1,19 +1,29 @@
 import Image from 'next/image'
 import avatar from '../../../../public/noavatar.png'
-const SingleProductPage = () => {
+import { fetchProduct } from '@/app/lib/data'
+import { updateProduct } from '@/app/lib/actions'
+
+
+const SingleProductPage = async ({ params }) => {
+   const { id } = params
+   const product = await fetchProduct(id)
+   console.log(product)
   return (
     <div className='w-full relative grid grid-cols-[1fr,1.5fr] items-start gap-8  bg-gray-800/50 p-6'>
       <div className='sticky top-0'>
         <Image
-          src={avatar}
+          src={product.img || avatar}
           alt=''
-          className='w-full rounded-md h-full'
           width={250}
           height={250}
+          className='w-full h-[400px] rounded-md object-cover aspect-square  object-top'
         />
-        <h1 className='capitalize font-semibold text-lg mt-3'>john doe</h1>
+        <h1 className='capitalize font-semibold text-lg mt-3'>
+          {product.title}
+        </h1>
       </div>
-      <form>
+      <form action={updateProduct}>
+        <input type='hidden' name='id' value={product._id} />
         <div className='w-full space-y-2'>
           <div className='w-full'>
             <label htmlFor='title' className='capitalize font-semibold block'>
@@ -22,21 +32,21 @@ const SingleProductPage = () => {
             <input
               type='text'
               id='title'
-              placeholder='Enter your title'
+              name='title'
+              placeholder={product.title || 'Enter your title'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
             <label htmlFor='price' className='capitalize font-semibold block'>
-              Email
+              Price
             </label>
             <input
               type='number'
               id='price'
-              placeholder='Enter your price'
+              name='price'
+              placeholder={product.price || 'Enter your price'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -46,9 +56,9 @@ const SingleProductPage = () => {
             <input
               type='number'
               id='stock'
-              placeholder='Enter your stock'
+              name='stock'
+              placeholder={product.stock || 'Enter your stock'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -58,9 +68,9 @@ const SingleProductPage = () => {
             <input
               type='text'
               id='color'
-              placeholder='Enter your color'
+              name='color'
+              placeholder={product.color || 'Enter your color'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -70,9 +80,9 @@ const SingleProductPage = () => {
             <input
               type='text'
               id='size'
-              placeholder='Enter your size'
+              name='size'
+              placeholder={product.size || 'Enter your size'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
-              required
             />
           </div>
           <div className='w-full'>
@@ -102,7 +112,7 @@ const SingleProductPage = () => {
               name='desc'
               id='desc'
               rows='10'
-              placeholder='Enter your description'
+              placeholder={product.desc || 'Enter your description'}
               className='w-full p-2 placeholder:capitalize placeholder:pl-2 bg-gray-700/55 border border-gray-800'
             />
           </div>
