@@ -1,10 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { User, Product } from './model'
+import { Product, User } from './model'
 import { ConnectDB } from './mongodb'
 import { redirect } from 'next/navigation'
 import bcrypt from 'bcrypt'
+import { signIn } from '../auth'
 
 export const addUser = async (formData) => {
   const { username, email, password, phone, address, isAdmin, isActive } =
@@ -35,6 +36,7 @@ export const addUser = async (formData) => {
   revalidatePath('/dashboard/users')
   redirect('/dashboard/users')
 }
+
 export const updateUser = async (formData) => {
   const { id, username, email, password, phone, address, isAdmin, isActive } =
     Object.fromEntries(formData)
@@ -68,7 +70,7 @@ export const updateUser = async (formData) => {
 }
 
 export const addProduct = async (formData) => {
-  const { title, stock, price, desc, color, size } =
+  const { title, desc, price, stock, color, size } =
     Object.fromEntries(formData)
 
   try {
@@ -76,9 +78,9 @@ export const addProduct = async (formData) => {
 
     const newProduct = new Product({
       title,
-      stock,
-      price,
       desc,
+      price,
+      stock,
       color,
       size,
     })
@@ -86,14 +88,15 @@ export const addProduct = async (formData) => {
     await newProduct.save()
   } catch (err) {
     console.log(err)
-    throw new Error('Failed to create Product!')
+    throw new Error('Failed to create product!')
   }
+
   revalidatePath('/dashboard/products')
   redirect('/dashboard/products')
 }
 
 export const updateProduct = async (formData) => {
-  const { id, title, stock, price, desc, color, size } =
+  const { id, title, desc, price, stock, color, size } =
     Object.fromEntries(formData)
 
   try {
@@ -101,21 +104,24 @@ export const updateProduct = async (formData) => {
 
     const updateFields = {
       title,
-      stock,
-      price,
       desc,
+      price,
+      stock,
       color,
       size,
     }
+
     Object.keys(updateFields).forEach(
       (key) =>
         (updateFields[key] === '' || undefined) && delete updateFields[key]
     )
+
     await Product.findByIdAndUpdate(id, updateFields)
   } catch (err) {
     console.log(err)
-    throw new Error('Failed to update Product!')
+    throw new Error('Failed to update product!')
   }
+
   revalidatePath('/dashboard/products')
   redirect('/dashboard/products')
 }
@@ -125,14 +131,13 @@ export const deleteUser = async (formData) => {
 
   try {
     ConnectDB()
-
-    const users = await User.findByIdAndDelete(id)
-    return users
-  } catch (error) {
-    console.log(error)
+    await User.findByIdAndDelete(id)
+  } catch (err) {
+    console.log(err)
     throw new Error('Failed to delete user!')
   }
-  revalidatePath('/dashboard/users')
+
+  revalidatePath('/dashboard/products')
 }
 
 export const deleteProduct = async (formData) => {
@@ -140,11 +145,24 @@ export const deleteProduct = async (formData) => {
 
   try {
     ConnectDB()
-    const products = await Product.findByIdAndDelete(id)
-    return products
-  } catch (error) {
-    console.log(error)
+    await Product.findByIdAndDelete(id)
+  } catch (err) {
+    console.log(err)
     throw new Error('Failed to delete product!')
   }
+
   revalidatePath('/dashboard/products')
+}
+
+export const authenticate = async (prevState, formData) => {
+  const { email, password } = Object.fromEntries(formData)
+
+  try {
+    await signIn('credentials', { email, password })
+  } catch (err) {
+    if (err.message.includes('CredentialsSignin')) {
+      return 'Wrong Credentials'
+    }
+    throw err
+  }
 }

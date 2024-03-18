@@ -12,7 +12,7 @@ import {
   MdHelpCenter,
   MdLogout,
 } from 'react-icons/md'
-
+import { auth, signOut } from '@/app/auth'
 const menuItems = [
   {
     title: 'Pages',
@@ -75,21 +75,22 @@ const menuItems = [
     ],
   },
 ]
-const Sidebar = () => {
+const Sidebar = async () => {
+  const { user } = await auth()
   return (
     <div className='w-full'>
       <div className='p-7 fixed top-0 z-10 left-0 bg-gray-800 h-screen  mx-auto max-w-[16rem] '>
         <div className={' flex items-center gap-5'}>
           <Image
             className={'rounded-full'}
-            src={'/noavatar.png'}
+            src={user.img || '/noavatar.png'}
             alt=''
             width='50'
             height='50'
           />
           <div className={'hidden lg:block'}>
             <span className={'capitalize font-semibold text-base'}>
-              john doe
+              {user.username}
             </span>
             <span className={'block text-sm text-gray-300'}>Administrator</span>
           </div>
@@ -112,9 +113,7 @@ const Sidebar = () => {
         >
           <button className={'flex items-center gap-4 p-2  text-base'}>
             <MdLogout />
-             <span className="lg:block hidden">
-              Logout
-            </span>
+            <span className='lg:block hidden'>Logout</span>
           </button>
         </form>
       </div>
